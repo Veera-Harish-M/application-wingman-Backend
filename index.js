@@ -21,7 +21,8 @@ mongoose.connect(process.env.DB_URL,{
 
 //routes
 const authRoutes = require('./routes/auth');
-//const userRoutes = require('./routes/user');
+const algoRoutes = require("./routes/algo")
+const userRoutes = require('./routes/user');
 
 //middlewares
 app.use(morgan('dev'));
@@ -32,6 +33,7 @@ app.use(cors())
 
 //route middlewares
 app.use('/api', authRoutes);
-//app.use('/api', userRoutes);
+app.use('/api', userRoutes);
+app.use('/api',algoRoutes)
 
 app.listen(8000,()=>console.log("Application Running at port 8000"))
