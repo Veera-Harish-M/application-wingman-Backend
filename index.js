@@ -36,4 +36,5 @@ app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api',algoRoutes)
 
-app.listen(8000,()=>console.log("Application Running at port 8000"))
+const port=process.env.PORT||'8080'
+app.listen(port,()=>console.log(`Application Running at port ${port}`))
