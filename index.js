@@ -1,8 +1,12 @@
-const express= require("express");
-const mongoose = require("mongoose")
-const cors= require("cors")
-require("dotenv").config();
-const app=express();
+const express = require('express');
+const morgan = require('morgan');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
+const expressValidator = require('express-validator');
+require('dotenv').config();
+const app = express();
 
 //db connection
 mongoose.connect(process.env.DB_URL,{
@@ -16,12 +20,18 @@ mongoose.connect(process.env.DB_URL,{
 
 
 //routes
-const loginRoutes = require("./routes/user")
+const authRoutes = require('./routes/auth');
+//const userRoutes = require('./routes/user');
 
 //middlewares
+app.use(morgan('dev'));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(expressValidator());
 app.use(cors())
 
 //route middlewares
-app.use("/app",loginRoutes)
+app.use('/api', authRoutes);
+//app.use('/api', userRoutes);
 
 app.listen(8000,()=>console.log("Application Running at port 8000"))
