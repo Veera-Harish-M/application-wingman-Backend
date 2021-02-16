@@ -19,17 +19,18 @@ mongoose.connect(process.env.DB_URL,{
 .catch((err)=>console.log("DB connection error",err))
 
 
-//routes
-const authRoutes = require('./routes/auth');
-const algoRoutes = require("./routes/algo")
-const userRoutes = require('./routes/user');
-
 //middlewares
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(expressValidator());
 app.use(cors())
+
+//routes
+const authRoutes = require('./routes/auth');
+const algoRoutes = require("./routes/algo")
+const userRoutes = require('./routes/user');
+
 
 //route middlewares
 app.use('/api', authRoutes);
