@@ -212,6 +212,7 @@ exports.forgotPassword = (req, res) => {
           expiresIn: "10m",
         }
       );
+      console.log(process.env.EMAIL_FROM);
 
       const emailData = {
         from: process.env.EMAIL_FROM,
