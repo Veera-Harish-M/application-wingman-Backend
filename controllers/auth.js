@@ -256,6 +256,7 @@ exports.forgotPassword = (req, res) => {
       });
     });
   } catch (err) {
+    console.log("fds");
     console.log(err);
     res.status(400).send({
       status: "Error",
