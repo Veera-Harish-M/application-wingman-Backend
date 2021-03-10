@@ -218,6 +218,7 @@ exports.forgotPassword = (req, res) => {
         to: email,
         subject: `Password Reset link`,
         html: `
+                <img style="width:40px;" src="https://www.clipartkey.com/mpngs/m/261-2614108_transparent-bird-wing-png-wing-tattoo-png.png" alt="AppWingman"/>
                 <h1>Please use the following link to reset your password</h1>
                 <p>${process.env.CLIENT_URL}/auth/password/reset/${token}</p>
                 <hr />
@@ -255,6 +256,7 @@ exports.forgotPassword = (req, res) => {
       });
     });
   } catch (err) {
+    console.log(err);
     res.status(400).send({
       status: "Error",
       message: "Something Went Wrong",
