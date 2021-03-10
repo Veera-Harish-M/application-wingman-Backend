@@ -247,6 +247,7 @@ exports.forgotPassword = (req, res) => {
             })
             .catch((err) => {
               console.log('SIGNUP EMAIL SENT ERROR', err)
+              console.error(err.response.body)
               return res.json({
                 status: "Error",
                 message: "Something went wrong",
