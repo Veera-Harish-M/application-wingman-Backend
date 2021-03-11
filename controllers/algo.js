@@ -6,9 +6,11 @@ exports.addAlgo = (req, res) => {
       name,
       description,
       code,
+      category,
       timecomplexity,
       spacecomplexity,
       usage,
+      language,
     } = req.body;
 
     Algo.findOne({name}).exec((err, realgo) => {
@@ -27,9 +29,11 @@ exports.addAlgo = (req, res) => {
         name,
         description,
         code,
+        category,
         timecomplexity,
         spacecomplexity,
         usage,
+        language,
       });
 
       algo.save(async (err, resalgo) => {

@@ -13,6 +13,9 @@ const algoSchema = new mongoose.Schema(
     code: {
       type: String,
     },
+    category:{
+      type:String,
+    },
     timecomplexity: {
         type: String,
       },
@@ -21,7 +24,10 @@ const algoSchema = new mongoose.Schema(
       },
     usage: {
         type: String,
-      },
+    },
+    language:{
+      type:String,
+    },
   }
 );
 
