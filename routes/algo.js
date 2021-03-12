@@ -1,11 +1,11 @@
 const express = require('express');
-const { addAlgo } = require('../controllers/algo');
+const { addAlgo, algoSearch } = require('../controllers/algo');
 
 const router = express.Router();
 
 
 router.post('/addAlgo',  addAlgo);
-//router.post('/getAlgo', socialsignin);
+router.get('/getAlgoSearch', algoSearch);
 
 
 module.exports = router;

@@ -57,3 +57,37 @@ exports.addAlgo = (req, res) => {
     });
   }
 };
+
+
+
+exports.algoSearch = (req, res) => {
+  try {
+    // create query object to hold search value and category value
+    const query = {};
+    // assign search value to query.name
+    if (req.query.search) {
+      query.name = {$regex: req.query.search, $options: 'i'};
+      // assigne category value to query.category
+      // if (req.query.category && req.query.category != 'All') {
+      //     query.category = req.query.category;
+      // }
+      // find the product based on query object with 2 properties
+      // search and category
+      Algo.find(query, (err, algos) => {
+        if (err) {
+          return res.status(400).json({
+            status: 'Error',
+            message: 'Something Went Wrong',
+          });
+        }
+        res.json({
+          status: 'Success',
+          message: 'Successfully fetched',
+          data: algos,
+        });
+      });
+    }
+  } catch (err) {
+    res.json({status: 'Error', message: 'Something Went Wrong'});
+  }
+};
