@@ -60,34 +60,75 @@ exports.addAlgo = (req, res) => {
 
 
 
-exports.algoSearch = (req, res) => {
+exports.algoSearch = async(req, res) => {
   try {
     // create query object to hold search value and category value
     const query = {};
+    const query1={};
+    let alg=[];
     // assign search value to query.name
     if (req.query.search) {
       query.name = {$regex: req.query.search, $options: 'i'};
-      // assigne category value to query.category
-      // if (req.query.category && req.query.category != 'All') {
-      //     query.category = req.query.category;
-      // }
-      // find the product based on query object with 2 properties
-      // search and category
-      Algo.find(query, (err, algos) => {
+      query1.description = {$regex: req.query.search, $options: 'i'};
+
+      await Algo.find(query, (err, algos) => {
         if (err) {
+          console.log(err);
           return res.status(400).json({
             status: 'Error',
             message: 'Something Went Wrong',
           });
         }
-        res.json({
-          status: 'Success',
-          message: 'Successfully fetched',
-          data: algos,
-        });
+        alg=algos;
+      });
+      await Algo.find(query1, (err, res) => {
+        if (err) {
+          console.log(err);
+          return res.status(400).json({
+            status: 'Error',
+            message: 'Something Went Wrong',
+          });
+        }
+        for (let i=0;i<res.length;i++){
+          alg.push(res[i]);
+        }
+      });
+
+      res.json({
+        status: 'Success',
+        message: 'Successfully fetched',
+        data: alg,
       });
     }
   } catch (err) {
     res.json({status: 'Error', message: 'Something Went Wrong'});
+  }
+};
+
+
+exports.getAlgoByCategory = async (req, res) => {
+  try {
+  
+    const categ=req.query.category;
+    await Algo.find({categ }).exec((err, algos) => {
+      console.log("hello");
+      if (err || !algos) {
+        return res.status(400).json({
+          status: "Error",
+          message: "NO algo exist",
+        });
+      }
+
+      res.json({
+        status: 'Success',
+        message: 'Successfully fetched',
+        data: algos,
+      });
+    });
+  } catch (err) {
+    res.status(400).send({
+      status: "Error",
+      message: "Something Went Wrong",
+    });
   }
 };

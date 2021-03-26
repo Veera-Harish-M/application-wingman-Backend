@@ -8,7 +8,8 @@
     "npm": "6.14.10"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
+    "start-dev":"node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "veera thiyga rowdy",
