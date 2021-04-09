@@ -1,42 +1,36 @@
-const Algo = require('../models/algo');
+const Error = require('../models/error');
 
-exports.addAlgo = (req, res) => {
+exports.addError = (req, res) => {
   try {
     const {
       name,
       description,
-      code,
+      solution,
       category,
-      timecomplexity,
-      spacecomplexity,
-      usage,
       language,
     } = req.body;
 
-    Algo.findOne({name}).exec((err, realgo) => {
+    Error.findOne({name}).exec((err, reError) => {
       if (err)
         return res
           .status(200)
           .json({status: 'Error', message: 'Something Went Wrong'});
-      if (realgo) {
+      if (reError) {
         return res.status(400).json({
           status: 'Error',
-          message: 'Algo name already exixt',
+          message: 'Error name already exixt',
         });
       }
 
-      const algo = new Algo({
+      const error = new Error({
         name,
         description,
-        code,
+        solution,
         category,
-        timecomplexity,
-        spacecomplexity,
-        usage,
         language,
       });
 
-      algo.save(async (err, resalgo) => {
+      error.save(async (err, resError) => {
         if (err) {
           return res.status(401).json({
             status: 'Error',
@@ -45,8 +39,8 @@ exports.addAlgo = (req, res) => {
         }
         return res.json({
           status: 'Success',
-          message: 'Algo added Successfully',
-          data: {id: resalgo._id},
+          message: 'Error added Successfully',
+          data: {id: resError._id},
         });
       });
     });
@@ -60,18 +54,18 @@ exports.addAlgo = (req, res) => {
 
 
 
-exports.algoSearch = async(req, res) => {
+exports.errorSearch = async(req, res) => {
   try {
     // create query object to hold search value and category value
     const query = {};
     const query1={};
-    let alg=[];
+    let errList=[];
     // assign search value to query.name
     if (req.query.search) {
       query.name = {$regex: req.query.search, $options: 'i'};
       query1.description = {$regex: req.query.search, $options: 'i'};
 
-      await Algo.find(query, (err, algos) => {
+      await Error.find(query, (err, errors) => {
         if (err) {
           console.log(err);
           return res.status(400).json({
@@ -79,9 +73,9 @@ exports.algoSearch = async(req, res) => {
             message: 'Something Went Wrong',
           });
         }
-        alg=algos;
+        errList=errors;
       });
-      await Algo.find(query1, (err, res) => {
+      await Error.find(query1, (err, res) => {
         if (err) {
           console.log(err);
           return res.status(400).json({
@@ -90,14 +84,14 @@ exports.algoSearch = async(req, res) => {
           });
         }
         for (let i=0;i<res.length;i++){
-          alg.push(res[i]);
+            errList.push(res[i]);
         }
       });
 
       res.json({
         status: 'Success',
         message: 'Successfully fetched',
-        data: alg,
+        data: errList,
       });
     }
   } catch (err) {
@@ -106,13 +100,13 @@ exports.algoSearch = async(req, res) => {
 };
 
 
-exports.getAlgoByCategory = async (req, res) => {
+exports.getErrorByCategory = async (req, res) => {
   try {
   
     const categ=req.query.category;
-    await Algo.find({category:categ }).exec((err, algos) => {
+    await Error.find({category: categ }).exec((err, errors) => {
       console.log("hello");
-      if (err || !algos) {
+      if (err || !errors) {
         return res.status(400).json({
           status: "Error",
           message: "NO algo exist",
@@ -122,7 +116,7 @@ exports.getAlgoByCategory = async (req, res) => {
       res.json({
         status: 'Success',
         message: 'Successfully fetched',
-        data: algos,
+        data: errors,
       });
     });
   } catch (err) {
@@ -132,3 +126,4 @@ exports.getAlgoByCategory = async (req, res) => {
     });
   }
 };
+ 

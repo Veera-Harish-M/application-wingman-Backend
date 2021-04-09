@@ -30,12 +30,14 @@ app.use(cors())
 const authRoutes = require('./routes/auth');
 const algoRoutes = require("./routes/algo")
 const userRoutes = require('./routes/user');
+const errorRoutes= require('./routes/error');
 
 
 //route middlewares
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api',algoRoutes)
+app.use('/api',errorRoutes)
 
 const port=process.env.PORT||'8080'
 app.listen(port,()=>console.log(`Application Running at port ${port}`))

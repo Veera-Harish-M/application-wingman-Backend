@@ -91,7 +91,7 @@ exports.socialsignin = (req, res) => {
       return res.json({
         token: token,
         status: "Success",
-        message: "SignUp Success",
+        message: "SignIn Success",
         userData: { _id, name, email, profilepic},
       });
     });
