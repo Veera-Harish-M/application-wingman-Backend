@@ -13,6 +13,9 @@ const errorSchema = new mongoose.Schema(
     solution: {
       type: String,
     },
+    example:{
+      type:String,
+    },
     category:{
       type:String,
     },
