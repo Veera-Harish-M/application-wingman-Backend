@@ -6,6 +6,7 @@ exports.addError = (req, res) => {
       name,
       description,
       solution,
+      example,
       category,
       language,
     } = req.body;
@@ -26,6 +27,7 @@ exports.addError = (req, res) => {
         name,
         description,
         solution,
+        example,
         category,
         language,
       });
