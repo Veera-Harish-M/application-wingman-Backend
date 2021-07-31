@@ -114,7 +114,10 @@ const getAlgo=async (search)=>{
             query.name = {$regex: tempWord, $options: 'i'};
             query1.description = {$regex: tempWord, $options: 'i'};
       
-            await Algo.find(query, (err, res1) => {
+            resultsFinal=[]
+            
+
+            await Algo.find(query, async(err, res1) => {
               if (err) {
                 console.log(err);
                 return res.status(400).json({
@@ -122,18 +125,9 @@ const getAlgo=async (search)=>{
                   message: 'Something Went Wrong',
                 });
               }
-
-              // console.log(res1);
-              res1.forEach(element1 => {
-                if(!(algIds.indexOf(element1._id) > -1)){
-                  console.log("came");
-                  alg.push(element1)
-                  algIds.push(element1._id)
-                }
-              });
-              // console.log(alg);
+              resultsFinal= resultsFinal.concat(res1)
             });
-            await Algo.find(query1, (err2, res2) => {
+            await Algo.find(query1, async(err2, res2) => {
               if (err2) {
                 console.log(err2);
                 return res2.status(400).json({
@@ -142,18 +136,19 @@ const getAlgo=async (search)=>{
                 });
               }
 
-              res2.forEach(element2 => {
-                if(!(algIds.indexOf(element2._id) > -1)){
-                  alg.push(element2)
-                  algIds.push(element2._id)
-                }
-
-              });
+              resultsFinal= resultsFinal.concat(res2)
               
             });
-      
+           
+            await resultsFinal.forEach(element2 => {
+              
+              if(!algIds.includes(JSON.stringify(element2._id))){
+                alg.push(element2)
+                algIds.push(JSON.stringify(element2._id))
+              }
+
+            });
           }
-      console.log("here",alg.length);
 
       })
       
