@@ -1,5 +1,6 @@
 const { words } = require("lodash");
 const Algo = require("../models/algo");
+const Files = require("../models/file");
 
 const { promisify } = require("util");
 
@@ -51,6 +52,37 @@ exports.addAlgo = (req, res) => {
           message: "Algo added Successfully",
           data: { id: resalgo._id },
         });
+      });
+    });
+  } catch (err) {
+    res.status(400).send({
+      status: "Error",
+      message: "Something Went Wrong",
+    });
+  }
+};
+
+exports.saveUserFile = (req, res) => {
+  try {
+    const { fileName, code, userId } = req.body;
+
+    const file = new Files({
+      fileName,
+      code,
+      userId,
+    });
+
+    file.save(async (err, filesaved) => {
+      if (err) {
+        return res.status(401).json({
+          status: "Error",
+          message: "Error saving user in database.",
+        });
+      }
+      return res.json({
+        status: "Success",
+        message: "File Saved Successfully",
+        data: { id: filesaved._id },
       });
     });
   } catch (err) {
@@ -186,4 +218,48 @@ exports.getAlgoByCategory = async (req, res) => {
       message: "Something Went Wrong",
     });
   }
+};
+
+exports.getSavedFiles = async (req, res) => {
+  try {
+    const id = req.query.id;
+    await Files.find({ userId: id }).exec((err, files) => {
+      console.log("hello");
+      if (err || !files) {
+        return res.status(400).json({
+          status: "Error",
+          message: "NO algo exist",
+        });
+      }
+
+      res.json({
+        status: "Success",
+        message: "Successfully fetched",
+        data: files,
+      });
+    });
+  } catch (err) {
+    res.status(400).send({
+      status: "Error",
+      message: "Something Went Wrong",
+    });
+  }
+};
+
+exports.updateFiles = (req, res) => {
+  // console.log('UPDATE USER - req.user', req.user, 'UPDATE DATA', req.body);
+  const { fileName, userId, code } = req.body;
+
+  Files.updateOne(
+    { _id: req.query.fileId },
+    { $set: { code: code } },
+    (err, fileSaved) => {
+      if (err || !fileSaved) {
+        return res.status(400).json({
+          error: "file not found",
+        });
+      }
+      res.json({ status: "success", message: "Updated Successfully" });
+    }
+  );
 };
